@@ -186,9 +186,8 @@ header {
 
 /* end footer */
 
-
-.backdrop{
-  background-color: rgba(0, 0, 0, .7);
+.backdrop {
+  background-color: rgba(0, 0, 0, 0.7);
   width: 100%;
   height: 100%;
   position: fixed;
@@ -204,7 +203,6 @@ header {
   align-items: center;
 }
 
-
 .cart-modal {
   border-radius: 5px;
   display: flex;
@@ -213,10 +211,9 @@ header {
   width: 450px;
   background-color: #fff;
   transform: translateY(-150%);
-  /* display: none; */
   z-index: 10;
   position: absolute;
-  transition: all .3s linear;
+  transition: all 0.3s linear;
 }
 
 .title-cart {
@@ -279,14 +276,14 @@ header {
 .clear-cart {
   margin-right: 5px;
   margin-left: 40px;
-  border: .5px solid #ff452c;
+  border: 0.5px solid #ff452c;
   background-color: #fff;
   color: #ff452c;
   padding: 8px 15px;
-  transition: all .2s linear;
+  transition: all 0.2s linear;
 }
 
-.clear-cart:hover{
+.clear-cart:hover {
   background-color: #ff452c;
   color: #fff;
 }
@@ -304,10 +301,74 @@ header {
   background-color: #b9ff9e;
   color: #009000;
   border: 1px solid #009000;
-  transition: all .2s linear;
+  transition: all 0.2s linear;
 }
 
-.confirm-cart:hover{
+.confirm-cart:hover {
   background-color: #18a000;
   color: #fff;
+}
+
+@media only screen and (max-width: 450px) {
+  .cart-modal {
+    width: 90vw;
+  }
+
+  .cart {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    margin-bottom: 15px;
+    align-content: space-between;
+  }
+
+  .cart-item-img img {
+    width: 90px;
+    height: 50px;
+    border-radius: 5px;
+  }
+
+  .cart-item-information {
+    font-size: 0.8rem;
+  }
+
+  .cart-item-conteoller {
+    font-size: 0.8rem;
+  }
+
+  .fa-trash {
+    font-size: 1rem;
+  }
+
+  .cart-footer {
+    display: grid;
+    margin: 20px;
+  }
+
+  .clear-cart {
+    margin: 1.1rem 0 0;
+  }
+  .confirm-cart {
+    margin-top: 0.5rem;
+  }
+
+  .navbar i {
+    font-size: 1.4rem;
+  }
+
+  .cart-item {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    width: 19px;
+    height: 18px;
+    font-size: 14px;
+  }
+
+  .title {
+    height: 150px;
+    font-size: 2.2rem;
+  }
 }

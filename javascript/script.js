@@ -1,35 +1,51 @@
 // access //
 
 // access to the data
-
 import productsData from "./products.js";
+
 
 // access to the cart btn
 let cartBtn = document.querySelector(".cart-btn");
+
 // access to the cart modal
 let cartModal = document.querySelector(".cart-modal");
+
 // accss to the backdrop
 let backdrop = document.querySelector(".backdrop");
+
 // access to the confirm cart
 let confirmCart = document.querySelector(".confirm-cart");
+
 // access to the products container
 let productContainer = document.querySelector(".products");
+
 // access to the cart content
 let cartContent = document.querySelector(".cart-content");
+
+// access to clear cart in modal cart
+let clearCart = document.querySelector(".clear-cart");
+
+// access to the total price 
+let totalPrice = document.querySelector(".total-price span");
+
+// access to the cart item
+let cartItem = document.querySelector(".cart-item");
+
+
 
 // access to the cart data
 let cart = JSON.parse(localStorage.getItem("cart"))
   ? JSON.parse(localStorage.getItem("cart"))
   : [];
 
-// access to clear cart in modal cart
-let clearCart = document.querySelector(".clear-cart");
-
-let totalPrice = document.querySelector(".total-price span");
-
+// access to the count product
 let countitems = JSON.parse(localStorage.getItem("countItems"))
   ? JSON.parse(localStorage.getItem("countItems"))
   : [];
+
+
+
+
 
 // classes //
 
@@ -42,6 +58,7 @@ class GetProducts {
 
 // class append products data to ui
 class Ui {
+
   // add product to ui
   addToUi(products) {
     // products loop
@@ -64,6 +81,8 @@ class Ui {
       productContainer.innerHTML += buildProduct;
     });
   }
+
+
   // add to cart buttons
   getAddToCartBtns() {
     // get all buttons add to cart
@@ -146,14 +165,18 @@ class Ui {
           // call addProductToCart for reload cart container
           ui.addProductToCart();
 
+          // loop on countitems for delete item in countitems
           countitems.forEach((item, index) => {
             if (item.id == event.target.dataset.id) {
               countitems.splice(index, 1);
             }
           });
 
+          // add new countitems to localStorage
           localStorage.setItem("countItems", JSON.stringify(countitems));
 
+          // update total price after remove item 
+          this.updateTotalPrice();
           return;
         }
 
@@ -200,21 +223,27 @@ class Ui {
             // add cart to local storage
             localStorage.setItem("cart", JSON.stringify(cart));
 
+            // loop on countitems for addn't item Repetitious
             countitems.forEach((item, index) => {
               if (item.id == event.target.dataset.id) {
                 countitems.splice(index, 1);
               }
             });
 
+            // build item for add to localStorage
             let item = {
               id: event.target.dataset.id,
               count: 1,
             };
 
+            // add new item to countitems
             countitems.push(item);
 
-            console.log(countitems);
+            // add new countitems to localStorage
             localStorage.setItem("countItems", JSON.stringify(countitems));
+
+            // update total price
+            this.updateTotalPrice();
           }
         });
 
@@ -309,76 +338,116 @@ class Ui {
   }
 
   conteoller() {
-    let subtractNode = document.querySelectorAll(".fa-chevron-up");
-    let subtract = [...subtractNode];
 
-    subtract.map((btn) => {
+    // access to the all plus one tag
+    let plusOneNode = document.querySelectorAll(".fa-chevron-up");
+    // convert to array type of node type
+    let plusOne = [...plusOneNode];
+
+
+    // loop on plusOne for add event listener on all btn plus on
+    plusOne.map((btn) => {
       btn.addEventListener("click", (e) => {
+
+        // access to the counter product in cart
         let counter = Number(btn.parentElement.children[1].innerText);
+
+        // plus one product in cart
         let newCounter = (btn.parentElement.children[1].innerText =
           counter + 1);
 
+        // loop on countitems for remove item Repetitious
         countitems.forEach((item, index) => {
           if (item.id == e.target.dataset.id) {
             countitems.splice(index, 1);
           }
         });
 
+        // build new item 
         let item = {
           id: e.target.dataset.id,
           count: newCounter,
         };
+
+        // add new item to countitems
         countitems.push(item);
 
-        console.log(countitems);
+        // add countitems to localStorage
         localStorage.setItem("countItems", JSON.stringify(countitems));
 
+        // update total price
         this.updateTotalPrice();
       });
     });
 
-    let plusOneNode = document.querySelectorAll(".fa-chevron-down");
-    let plusOne = [...plusOneNode];
+    // access to the counter product in cart
+    let subtractNode = document.querySelectorAll(".fa-chevron-down");
 
-    plusOne.map((btn) => {
+    // subtract product in cart
+    let subtract = [...subtractNode];
+
+
+    // loop on subtract tags
+    subtract.map((btn) => {
+
+      // add lister on every btns subtract
       btn.addEventListener("click", (e) => {
+
+        // access to the counter product in cart
         let counter = Number(btn.parentElement.children[1].innerText);
 
+        // plus one product in cart
         if (counter > 1) {
           let newCounter = (btn.parentElement.children[1].innerText =
             counter - 1);
+
+          // get proucts of localStorage
           let cartData = JSON.parse(localStorage.getItem("products"));
           cartData.map((product) => {
             if (product.id == e.target.dataset.id) {
             }
           });
 
+          // loop on countitems for remove item Repetitious
           countitems.forEach((item, index) => {
             if (item.id == e.target.dataset.id) {
               countitems.splice(index, 1);
             }
           });
 
+          // build new item 
           let item = {
             id: e.target.dataset.id,
             count: newCounter,
           };
 
+          // add new item to countitems
           countitems.push(item);
 
-          console.log(countitems);
+          // add countitems to localStorage
           localStorage.setItem("countItems", JSON.stringify(countitems));
         }
 
         if (counter <= 1) {
+
+          // access to the cart container
           let cartContentArr = [...cartContent.children];
+
+          // loop on all item in cart
           cartContentArr.forEach((product, index) => {
+
+            // if event target id == product id in localStorage
             if (e.target.dataset.id == product.dataset.id) {
+
+              // remove this product 
               cartContentArr.splice(index, 1);
+
 
               let cartData = JSON.parse(localStorage.getItem("cart"));
 
+              // loop on cart data
               cartData.forEach((productdata, index) => {
+
                 if (product.dataset.id == productdata.id) {
                   cartData.splice(index, 1);
                 }
@@ -422,7 +491,9 @@ class Ui {
                 this.conteoller();
               });
 
+              // access to the cart conitainer
               let newCartConent = [...cartContent.children];
+              // if cart container is null
               if (newCartConent.length == 0) {
                 totalPrice.innerText = 0;
               }
@@ -457,12 +528,14 @@ class Ui {
             }
           });
 
+          // loop on countitems for remove Repetitious product
           countitems.forEach((item, index) => {
             if (item.id == e.target.dataset.id) {
               countitems.splice(index, 1);
             }
           });
 
+          // add new countitems to localStorage
           localStorage.setItem("countItems", JSON.stringify(countitems));
         }
 
@@ -470,13 +543,25 @@ class Ui {
       });
     });
 
+    // access to the all btns remove item of cart
     let removeItemNode = document.querySelectorAll(".fa-trash");
+
+    // convert to array type of node type
     let removeItem = [...removeItemNode];
 
+    // loop on removeItem 
     removeItem.map((btn) => {
+
+      // add listener on every btns
       btn.addEventListener("click", (e) => {
+
+        // access to the cart contanier
         let cartContentArr = [...cartContent.children];
+
+        // loop on cart countainer
         cartContentArr.forEach((product, index) => {
+
+          // if event target id == product id , remove this product in cart
           if (e.target.dataset.id == product.dataset.id) {
             cartContentArr.splice(index, 1);
 
@@ -526,6 +611,7 @@ class Ui {
 
             let newCartConent = [...cartContent.children];
             if (newCartConent.length == 0) {
+              localStorage.setItem("countItems", JSON.stringify([]));
               totalPrice.innerText = 0;
             }
 
@@ -545,8 +631,8 @@ class Ui {
 
               // do loop on newAddToCartBtns
               newAddToCartBtns.map((btn) => {
-                // btn data-id == event target id
-                if (btn.dataset.id == event.target.dataset.id) {
+                // btn data-id == e target id
+                if (btn.dataset.id == e.target.dataset.id) {
                   // build i
                   let i = `<i class="fas fa-shopping-cart"></i>`;
                   // replace btn text
@@ -554,15 +640,25 @@ class Ui {
 
                   btn.disabled = false;
                 }
+                this.updateTotalPrice();
               });
             }
           }
         });
+
+        countitems.forEach((item, index) => {
+          if (item.id == e.target.dataset.id) {
+            countitems.splice(index, 1);
+          }
+        });
+
+        localStorage.setItem("countItems", JSON.stringify(countitems));
+
         this.updateTotalPrice();
       });
     });
-    this.updateTotalPrice();
   }
+
 
   updateTotalPrice() {
     if (cart) {
@@ -574,7 +670,7 @@ class Ui {
       let countItemsHtml = [...countItemsNode];
       let priceitems = [...priceitemsNode];
 
-      // console.log(countItemsHtml.find((itemHtml) => itemHtml.dataset.id == 2));
+      //
 
       priceitems.forEach((item) => {
         countitems.forEach((cItem) => {
@@ -584,7 +680,7 @@ class Ui {
             allPriceitems.push(newTotalPrice);
           }
         });
-        // console.log(countItemsHtml.find((itemHtml) => itemHtml.dataset.id == 2));
+        //
         countItemsHtml.forEach((itemHtml) => {
           if (Number(itemHtml.innerText) < 1) {
             let newTotalPrice =
@@ -600,13 +696,20 @@ class Ui {
 
         totalPrice.innerText = allNewtotalPrice.toFixed(2);
       });
-      console.log(allPriceitems);
+
+      let countProductInCart = 0;
+      // let  = JSON.parse(localStorage.getItem("countItems"));
+
+      countitems.forEach((count) => {
+        countProductInCart += count.count;
+      });
+
+      cartItem.innerText = countProductInCart;
     }
 
-    // if (!cart) {
-
-    //   totalPrice.innerText = 0;
-    // }
+    if (!cart) {
+      localStorage.setItem("countItems", JSON.stringify([]));
+    }
   }
 }
 
@@ -674,8 +777,10 @@ function hideCartFn() {
 }
 
 function clearCartFn() {
+
   // convert cartContent to ""
   cartContent.innerHTML = "";
+
   // remove cartdata of local storage
   localStorage.removeItem("cart");
   // call addProductToCart for convert to add to cart when clear cart
@@ -684,4 +789,9 @@ function clearCartFn() {
   ui.updateTotalPrice();
 
   totalPrice.innerText = 0;
+
+  cartItem.innerText = 0;
+
+  cartModal.style.transform = "translateY(-150%)";
+  backdrop.style.display = "none";
 }
